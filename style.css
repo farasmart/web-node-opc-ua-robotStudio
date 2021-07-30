@@ -1,0 +1,41 @@
+html {
+  font-size: 10px;
+}
+
+body {
+  font-size: 1rem;
+  background-image: url("/image/2.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.page {
+  min-height: 100vh;
+  padding-top: 5rem;
+}
+
+.container {
+  max-width: 100rem;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
+button {
+  width: 8rem;
+  height: 6rem;
+  background-color: powderblue;
+}
+
+button.stopbtn {
+  background-color: red;
+}
+/*# sourceMappingURL=style.css.map */
