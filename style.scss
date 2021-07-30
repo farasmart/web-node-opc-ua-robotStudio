@@ -29,6 +29,8 @@ button {
     width: 8rem;
     height: 6rem;
     background-color: powderblue;
+    border-radius:1rem;
+    outline: 0;
     &.stopbtn {
         background-color: red;
     }
