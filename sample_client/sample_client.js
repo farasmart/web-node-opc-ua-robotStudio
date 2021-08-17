@@ -4,11 +4,11 @@
 const opcua = require("node-opcua");
 const async = require("async");
 
-// client setUp
-const endpointUrl =  "opc.tcp://windows-kirhij4:61510/ABB.IRC5.OPCUA.Server"
+// // client setUp
+// const endpointUrl =  "opc.tcp://windows-kirhij4:61510/ABB.IRC5.OPCUA.Server"
 
-// const endpointUrl =
-//   "opc.top://" + require("os").hostname() + "61510/ABB.IRC5.OPCUA.Server";
+const endpointUrl =
+  "opc.top://" + require("os").hostname() + "61510/ABB.IRC5.OPCUA.Server";
 
 //musthave
 const client = opcua.OPCUAClient.create({
