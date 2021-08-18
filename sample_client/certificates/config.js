@@ -6,9 +6,9 @@ module.exports = {
         commonName: "NodeOPCUA-TEST",
         organization: "NodeOPCUA",
         organizationalUnit: "Unit",
-        locality: "Riga",
+        locality: "Paris",
         state: "IDF",
-        country: "LV" // Two letters
+        country: "FR" // Two letters
     },
 
     validity: 365 * 15, // 15 years
