@@ -25,6 +25,9 @@ client.on("backoff", (retry, delay) =>
 );
 
 
+//security mode 
+//user token policies "username and password"
+
 let the_session, the_subscription;
 
 async.series(
@@ -44,14 +47,10 @@ async.series(
 
 function (callback) {
   const applicationDescription = client.findEndpointForSecurity(
-    opcua.MessageSecurityMode.SIGN,
+    opcua.MessageSecurityMode.Sign,
     opcua.SecurityPolicy.Basic256Sha256
 );
 
-client = new opcua.OPCUAClient({
-    securityMode: opcua.MessageSecurityMode.SIGN,
-    securityPolicy: opcua.SecurityPolicy.Basic256Sha256
-});
 
 },
 
