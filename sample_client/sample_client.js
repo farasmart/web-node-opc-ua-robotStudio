@@ -1,6 +1,7 @@
 /*global require,console,setTimeout */
 const opcua = require("node-opcua");
 const async = require("async");
+const { UserIdentityToken, UserNameIdentityToken, UserTokenPolicy, UserTokenType } = require("node-opcua");
 
 // var serverCertificateFileName = {
 //   serverCertificate: crypto_utils.readCertificate("sample_client/mycertificate.pem")
@@ -8,9 +9,26 @@ const async = require("async");
 
 // try this to connect,nothing
 //2021-08-18 11:22:55.816 +03:00 [INF] opc.tcp://windows-kirhij4:61510/ABB.IRC5.OPCUA.Server
+
+
+
 const endpointUrl = "opc.tcp://" + "localhost" + ":61510/ABB.IRC5.OPCUA.Server";
+
+
+
+
+const applicationDescription = client.findEndpointForSecurity(
+  opcua.MessageSecurityMode.Sign,
+  opcua.SecurityPolicy.Basic256Sha256
+);
+
+const user = new client.options(UserTokenType);
+ 
 const client = opcua.OPCUAClient.create({
   endpoint_must_exist: false,
+  securityMode: opcua.MessageSecurityMode.SIGN,
+  securityPolicy: opcua.SecurityPolicy.Basic256Sha256,
+  aplicationUser(userName,password);
 });
 client.on("backoff", (retry, delay) =>
   console.log(
@@ -23,9 +41,12 @@ client.on("backoff", (retry, delay) =>
     "seconds"
   )
 );
+    // const user = client.options(UserNameIdentityToken){
+    //   userName:"default";
+    //   password:"robotics";
+    // }
 
-
-//security mode 
+//security mode
 //user token policies "username and password"
 
 let the_session, the_subscription;
@@ -39,21 +60,10 @@ async.series(
           console.log(" cannot connect to endpoint :", endpointUrl);
         } else {
           console.log("connected !");
-         
         }
         callback(err);
       });
     },
-
-function (callback) {
-  const applicationDescription = client.findEndpointForSecurity(
-    opcua.MessageSecurityMode.Sign,
-    opcua.SecurityPolicy.Basic256Sha256
-);
-
-
-},
-
     // step 2 : createSession
     // function (callback) {
     //   client.createSession(function (err, session) {
