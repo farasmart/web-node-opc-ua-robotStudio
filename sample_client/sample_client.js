@@ -1,7 +1,12 @@
 /*global require,console,setTimeout */
 const opcua = require("node-opcua");
 const async = require("async");
-const { UserIdentityToken, UserNameIdentityToken, UserTokenPolicy, UserTokenType } = require("node-opcua");
+const {
+  UserIdentityToken,
+  UserNameIdentityToken,
+  UserTokenPolicy,
+  UserTokenType,
+} = require("node-opcua");
 
 // var serverCertificateFileName = {
 //   serverCertificate: crypto_utils.readCertificate("sample_client/mycertificate.pem")
@@ -10,25 +15,19 @@ const { UserIdentityToken, UserNameIdentityToken, UserTokenPolicy, UserTokenType
 // try this to connect,nothing
 //2021-08-18 11:22:55.816 +03:00 [INF] opc.tcp://windows-kirhij4:61510/ABB.IRC5.OPCUA.Server
 
+const endpointUrl = "opc.tcp://" + "localhost" + ":61510";
 
+// const user = new client.options(UserTokenType);
+const UserIdentityInfoUserName = {
+  password: "default",
+  userName: "robotics",
+  type: UserTokenType.UserName
+};
 
-const endpointUrl = "opc.tcp://" + "localhost" + ":61510/ABB.IRC5.OPCUA.Server";
-
-
-
-
-const applicationDescription = client.findEndpointForSecurity(
-  opcua.MessageSecurityMode.Sign,
-  opcua.SecurityPolicy.Basic256Sha256
-);
-
-const user = new client.options(UserTokenType);
- 
 const client = opcua.OPCUAClient.create({
   endpoint_must_exist: false,
-  securityMode: opcua.MessageSecurityMode.SIGN,
+  securityMode: opcua.MessageSecurityMode.SignAndEncrypt,
   securityPolicy: opcua.SecurityPolicy.Basic256Sha256,
-  aplicationUser(userName,password);
 });
 client.on("backoff", (retry, delay) =>
   console.log(
@@ -41,13 +40,14 @@ client.on("backoff", (retry, delay) =>
     "seconds"
   )
 );
-    // const user = client.options(UserNameIdentityToken){
-    //   userName:"default";
-    //   password:"robotics";
-    // }
 
-//security mode
-//user token policies "username and password"
+// const applicationDescription = client.findEndpointForSecurity(
+//   opcua.MessageSecurityMode.Sign,
+//   opcua.SecurityPolicy.Basic256Sha256
+// );
+
+
+
 
 let the_session, the_subscription;
 
@@ -64,97 +64,101 @@ async.series(
         callback(err);
       });
     },
+
+    // certificate
+    
+
     // step 2 : createSession
-    // function (callback) {
-    //   client.createSession(function (err, session) {
-    //     if (err) {
-    //       return callback(err);
-    //     }
-    //     the_session = session;
-    //     callback();
-    //   });
-    // },
+    function (callback) {
+      client.createSession(function (err, session) {
+        if (err) {
+          return callback(err);
+        }
+        the_session = session;
+        callback();
+      });
+    },
 
     // step 3 : browse
-    // function (callback) {
-    //   the_session.browse("RootFolder", function (err, browseResult) {
-    //     if (!err) {
-    //       console.log("Browsing rootfolder: ");
-    //       for (let reference of browseResult.references) {
-    //         console.log(
-    //           reference.browseName.toString(),
-    //           reference.nodeId.toString()
-    //         );
-    //       }
-    //     }
-    //     callback(err);
-    //   });
-    // },
+    function (callback) {
+      the_session.browse("RootFolder", function (err, browseResult) {
+        if (!err) {
+          console.log("Browsing rootfolder: ");
+          for (let reference of browseResult.references) {
+            console.log(
+              reference.browseName.toString(),
+              reference.nodeId.toString()
+            );
+          }
+        }
+        callback(err);
+      });
+    },
 
     // step 4 : read a variable with readVariableValue
-    // function (callback) {
-    //   the_session.readVariableValue(
-    //     "ns=1;s=free_memory",
-    //     function (err, dataValue) {
-    //       if (!err) {
-    //         console.log(" free mem % = ", dataValue.toString());
-    //       }
-    //       callback(err);
-    //     }
-    //   );
-    // },
+    function (callback) {
+      the_session.readVariableValue(
+        "ns=1;s=free_memory",
+        function (err, dataValue) {
+          if (!err) {
+            console.log(" free mem % = ", dataValue.toString());
+          }
+          callback(err);
+        }
+      );
+    },
 
     // step 4' : read a variable with read
-    // function (callback) {
-    //   const maxAge = 0;
-    //   const nodeToRead = {
-    //     nodeId: "ns=1;s=free_memory",
-    //     attributeId: opcua.AttributeIds.Value,
-    //   };
+    function (callback) {
+      const maxAge = 0;
+      const nodeToRead = {
+        nodeId: "ns=1;s=free_memory",
+        attributeId: opcua.AttributeIds.Value,
+      };
 
-    //   the_session.read(nodeToRead, maxAge, function (err, dataValue) {
-    //     if (!err) {
-    //       console.log(" free mem % = ", dataValue.toString());
-    //     }
-    //     callback(err);
-    //   });
-    // },
+      the_session.read(nodeToRead, maxAge, function (err, dataValue) {
+        if (!err) {
+          console.log(" free mem % = ", dataValue.toString());
+        }
+        callback(err);
+      });
+    },
 
     // step 5: install a subscription and install a monitored item for 10 seconds
-    // function (callback) {
-    //   const subscriptionOptions = {
-    //     maxNotificationsPerPublish: 1000,
-    //     publishingEnabled: true,
-    //     requestedLifetimeCount: 100,
-    //     requestedMaxKeepAliveCount: 10,
-    //     requestedPublishingInterval: 1000,
-    //   };
-    //   the_session.createSubscription2(
-    //     subscriptionOptions,
-    //     (err, subscription) => {
-    //       if (err) {
-    //         return callback(err);
-    //       }
+    function (callback) {
+      const subscriptionOptions = {
+        maxNotificationsPerPublish: 1000,
+        publishingEnabled: true,
+        requestedLifetimeCount: 100,
+        requestedMaxKeepAliveCount: 10,
+        requestedPublishingInterval: 1000,
+      };
+      the_session.createSubscription2(
+        subscriptionOptions,
+        (err, subscription) => {
+          if (err) {
+            return callback(err);
+          }
 
-    //       the_subscription = subscription;
+          the_subscription = subscription;
 
-    //       the_subscription
-    //         .on("started", () => {
-    //           console.log(
-    //             "subscription started for 2 seconds - subscriptionId=",
-    //             the_subscription.subscriptionId
-    //           );
-    //         })
-    //         .on("keepalive", function () {
-    //           console.log("subscription keepalive");
-    //         })
-    //         .on("terminated", function () {
-    //           console.log("terminated");
-    //         });
-    //       callback();
-    //     }
-    //   );
-    // },
+          the_subscription
+            .on("started", () => {
+              console.log(
+                "subscription started for 2 seconds - subscriptionId=",
+                the_subscription.subscriptionId
+              );
+            })
+            .on("keepalive", function () {
+              console.log("subscription keepalive");
+            })
+            .on("terminated", function () {
+              console.log("terminated");
+            });
+          callback();
+        }
+      );
+    },
     // function (callback) {
     //   // install monitored item
     //   const monitoredItem = the_subscription.monitor(
@@ -183,9 +187,9 @@ async.series(
       setTimeout(() => callback(), 10 * 1000);
     },
     // terminate session
-    // function (callback) {
-    //   the_subscription.terminate(callback);
-    // },
+    function (callback) {
+      the_subscription.terminate(callback);
+    },
     // close session
     function (callback) {
       the_session.close(function (err) {
