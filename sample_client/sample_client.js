@@ -6,6 +6,18 @@ const {
   UserNameIdentityToken,
   UserTokenPolicy,
   UserTokenType,
+  ReadValueId,
+  AttributeIds,
+  OPCUAClient,
+  ClientSession, 
+  StatusCodes,
+  MessageSecurityMode,
+  SecurityPolicy,
+  UserIdentityInfoUserName,
+  WriteValue,
+  NumericRange,
+  EndpointDescription
+  
 } = require("node-opcua");
 
 // var serverCertificateFileName = {
@@ -18,11 +30,11 @@ const {
 const endpointUrl = "opc.tcp://" + "localhost" + ":61510";
 
 // const user = new client.options(UserTokenType);
-const UserIdentityInfoUserName = {
-  password: "default",
-  userName: "robotics",
-  type: UserTokenType.UserName
-};
+// const UserIdentityInfoUserName = {
+//   password: "default",
+//   userName: "robotics",
+//   type: UserTokenType.UserName
+// };
 
 const client = opcua.OPCUAClient.create({
   endpoint_must_exist: false,
@@ -80,45 +92,92 @@ async.series(
     },
 
     // step 3 : browse
-    function (callback) {
-      the_session.browse("RootFolder", function (err, browseResult) {
-        if (!err) {
-          console.log("Browsing rootfolder: ");
-          for (let reference of browseResult.references) {
-            console.log(
-              reference.browseName.toString(),
-              reference.nodeId.toString()
-            );
-          }
-        }
-        callback(err);
-      });
-    },
+    // function (callback) {
+    //   the_session.browse("RootFolder", function (err, browseResult) {
+    //     if (!err) {
+    //       console.log("Browsing rootfolder: ");
+    //       for (let reference of browseResult.references) {
+    //         console.log(
+    //           reference.browseName.toString(),
+    //           reference.nodeId.toString()
+    //         );
+    //       }
+    //     }
+    //     callback(err);
+    //   });
+    // },
 
     // step 4 : read a variable with readVariableValue
     function (callback) {
       the_session.readVariableValue(
-        "ns=1;s=free_memory",
+        "ns=2;i=426",
         function (err, dataValue) {
           if (!err) {
-            console.log(" free mem % = ", dataValue.toString());
+            console.log(" r % = ", dataValue.toString());
           }
           callback(err);
         }
       );
     },
 
+
+    // function 
+    // function (callback){
+    //   const nodeToRead = {
+    //     nodeId : "ns=2;i=426",
+    //      attributeIds:opcua.AttributeIds.Value,
+    //      value: {
+    //         sourceTimeStamp: new Date(),
+    //         statusCode: opcua.StatusCode.Good,
+    //          value: {
+    //           dataType: opcua.DataType.String,
+    //          value: "aasja",
+    //     }
+    //   }
+    // }
+    //   the_session.write(nodeToRead,function(err,dataValue){
+    //     if(!err){
+    //       console.log("changed :" ,dataValue.toString())
+    //     }
+    //   })
+    // }, 
+async function () {
+    let val = await the_session.read({nodeId: "ns=2;i=399",AttributeIds:opcua.AttributeIds.Value})
+    console.log("read",val.value.toString())
+    
+
+    const nodeToRead  = {
+      nodeId:"ns=2;i=399",
+      attributeId:opcua.AttributeIds.Value,
+        value :{
+          statusCode: opcua.StatusCodes.Good,
+       value:{
+         dataType: opcua.DataType.String,
+         value:"lola"
+    }
+  }
+}
+ 
+    let risultato = await the_session.write(nodeToRead)
+    console.log(risultato.toString());
+    
+    val = await the_session.read({nodeId: "ns=2;i=399"})
+    console.log(val.value.toString());
+},
+
     // step 4' : read a variable with read
     function (callback) {
       const maxAge = 0;
       const nodeToRead = {
-        nodeId: "ns=1;s=free_memory",
+        nodeId: "ns=2;i=399",
         attributeId: opcua.AttributeIds.Value,
+        attributeIds:opcua.AttributeIds.DisplayName,
+        
       };
 
       the_session.read(nodeToRead, maxAge, function (err, dataValue) {
         if (!err) {
-          console.log(" free mem % = ", dataValue.toString());
+          console.log(" the florr= ", dataValue.toString());
         }
         callback(err);
       });
