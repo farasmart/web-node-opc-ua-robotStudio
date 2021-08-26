@@ -110,7 +110,7 @@ async.series(
     // step 4 : read a variable with readVariableValue
     function (callback) {
       the_session.readVariableValue(
-        "ns=2;i=426",
+        "ns=2;i=399",
         function (err, dataValue) {
           if (!err) {
             console.log(" r % = ", dataValue.toString());
@@ -153,7 +153,7 @@ async function () {
           statusCode: opcua.StatusCodes.Good,
        value:{
          dataType: opcua.DataType.String,
-         value:"lola"
+         value:"hello"
     }
   }
 }

@@ -1,0 +1,27 @@
+
+{
+    "func1" : {
+       "nodeId" : "ns=2;i=399",
+       "attributeId":"opcua.AttributeIds.Value",
+       "value" :{
+        "statusCode": "opcua.StatusCodes.Good",
+     "value":{
+        "dataType":"opcua.DataType.String",
+        "value":"lola"
+    }
+}},
+    
+    "func2" : {
+       "name" : "suresh",
+       "password" : "password2",
+       "profession" : "librarian",
+       "id": 2
+    },
+    
+    "func3" : {
+       "name" : "ramesh",
+       "password" : "password3",
+       "profession" : "clerk",
+       "id": 3
+    }
+ }
