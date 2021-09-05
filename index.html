@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" href="/css/style.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     <title>Document</title>
   </head>
@@ -12,22 +13,25 @@
     <div class="page">
       <div class="container">
         <div class="wrapper">
+          <form action="/test" method="POST"></form>
           <div class="block">
-            <button type="submit" class="btn" data-toggle="">FUNC 1</button>
+            <button onclick="func1" value="h1" type="submit" class="btn" id="1">FUNC 1</button>
           </div>
           <div class="block">
-            <button type="submit" class="btn" data-toggle="">FUNC 2</button>
+            <button onclick="func2" type="submit" class="btn" id="2">FUNC 2</button>
           </div>
           <div class="block">
-            <button type="submit" class="btn" data-toggle="">FUNC 3</button>
+            <button type="submit" class="btn" id="3">FUNC 3</button>
           </div>
           <div class="block">
-            <button type="submit" class="btn" data-toggle="">FUNC 4</button>
+            <button type="submit" class="btn" id="4">FUNC 4</button>
           </div>
           <div class="block">
-            <button type="submit" class="stopbtn">Stop</button>
+            <button type="submit" class="stopbtn" id="stop">Stop</button>
           </div>
+        </form>
         </div>
+        <script src="/js/main.js"></script>
       </div>
     </div>
   </body>
